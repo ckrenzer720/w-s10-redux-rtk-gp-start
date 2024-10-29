@@ -14,17 +14,26 @@ export const todosSlice = createSlice({
     showCompletedTodos: true,
   },
   reducers: {
+    createNewTodo: {
+      prepare(label, complete) {
+        return { payload: { id: getNextId(), label, complete }}
+      },
+      reducer(state, action) {
+        state.todos.push(action.payload)
+      }
+    },
     toggleShowCompletedTodos: state => {
       state.showCompletedTodos = !state.showCompletedTodos // < -- ACTION CREATOR IS THIS FUNCTION INSIDE THE REDUCER
     },
     toggleTodo: (state, action) => {
       let todo = state.todos.find(td => td.id === action.payload)
       todo.complete = !todo.complete
-    }
+    },
   }
 });
 
 export const {
+  createNewTodo,
   toggleTodo,
   toggleShowCompletedTodos,
 } = todosSlice.actions // <-- becomes the click handler and dispatches as a function
